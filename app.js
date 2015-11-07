@@ -139,8 +139,10 @@ app.get('/url', function (req, res) {
           file.write(data);
       }).on('end', function() {
           file.end();
-          runTesseract(fileName, function(text){
-            res.send(text);
+          makeBinaryImage(fileName, function(){
+            runTesseract(fileName, function(text){
+              res.send(text);
+            });
           });
       });
     }

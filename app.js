@@ -40,12 +40,13 @@ app.post('/upload', upload.single('image'), function(req, res){
   runTesseract(file.path, function(text){
     res.send(text);
   });
-  console.log(req.body, req.file);
-  // return res.send("UPLOAD REQUEST");
 });
 
 app.get('/', function (req, res) {
   return res.sendFile(__dirname + '/views/index.html');
+});
+
+app.get('/url', function (req, res) {
   //http://testeract.herokuapp.com/?url=http://www.codeproject.com/KB/recipes/OCR-Chain-Code/image012.jpg
   var url = req.query.url;
   try{
@@ -70,7 +71,7 @@ app.get('/', function (req, res) {
   }catch(e){
     res.send("Something exploded: ", e);
   }
-});
+}
 
 var server = app.listen(process.env.PORT || 3000, function () {
   var host = server.address().address;

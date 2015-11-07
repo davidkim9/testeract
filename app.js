@@ -4,6 +4,7 @@ var exec = require('child_process').exec;
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
+var shortid = require('shortid');
 
 var app = express();
 
@@ -11,7 +12,8 @@ app.get('/', function (req, res) {
   //http://testeract.herokuapp.com/?url=http://www.codeproject.com/KB/recipes/OCR-Chain-Code/image012.jpg
   var url = req.query.url;
   try{
-    var fileName = "tempFile.jpg";
+    var fileName = "./uploads/t_" + shortid.generate() + ".jpg";
+    
     var file = fs.createWriteStream(fileName);
     var cb = function(response) {
       response.on('data', function(data) {

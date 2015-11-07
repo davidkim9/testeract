@@ -6,14 +6,14 @@ var app = express();
 
 app.get('/', function (req, res) {
   var child;
-  var command = 'tesseract -l eng 123.jpg test';
+  var command = 'tesseract 123.jpg stdout';
   child = exec(command, function (error, stdout, stderr) {
     // sys.print('stdout: ' + stdout);
     // sys.print('stderr: ' + stderr);
     if (error !== null) {
       console.log('exec error: ' + error);
     }
-    res.send('Hello World!' + stdout + error + stderr);
+    res.send(stdout);
   });
 });
 

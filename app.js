@@ -71,7 +71,7 @@ app.get('/url', function (req, res) {
   }catch(e){
     res.send("Something exploded: ", e);
   }
-}
+});
 
 var server = app.listen(process.env.PORT || 3000, function () {
   var host = server.address().address;

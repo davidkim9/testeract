@@ -2,35 +2,43 @@ var express = require('express');
 var sys = require('sys')
 var exec = require('child_process').exec;
 var http = require('http');
+var https = require('https');
 var fs = require('fs');
 
 var app = express();
 
 app.get('/', function (req, res) {
-  var fileName = "tempFile.jpg";
-
-  var file = fs.createWriteStream(fileName);
-  console.log("Requesting");
-  var request = http.get("http://www.codeproject.com/KB/recipes/OCR-Chain-Code/image012.jpg", function(response) {
-    console.log("Request");
-    response.on('data', function(data) {
-        file.write(data);
-    }).on('end', function() {
-        file.end();
-        console.log("Download complete!");
-        var child;
-        var command = "tesseract " + fileName + " stdout";
-        child = exec(command, function (error, stdout, stderr) {
-          console.log('stdout: ' + stdout);
-          console.log('stderr: ' + stderr);
-          console.log("Tesseract complete!");
-          if (error !== null) {
-            console.log('exec error: ' + error);
-          }
-          res.send(stdout);
-        });
-    });
-  });
+  //http://testeract.herokuapp.com/?url=http://www.codeproject.com/KB/recipes/OCR-Chain-Code/image012.jpg
+  var url = req.query.url;
+  try{
+    var fileName = "tempFile.jpg";
+    var file = fs.createWriteStream(fileName);
+    var cb = function(response) {
+      response.on('data', function(data) {
+          file.write(data);
+      }).on('end', function() {
+          file.end();
+          var child;
+          var command = "tesseract " + fileName + " stdout";
+          child = exec(command, function (error, stdout, stderr) {
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+            console.log("Tesseract complete!");
+            if (error !== null) {
+              console.log('exec error: ' + error);
+            }
+            res.send(stdout);
+          });
+      });
+    }
+    if(url.indexOf("https://") == 0){
+      https.get(url, cb);
+    }else{
+      http.get(url, cb);
+    }
+  }catch(e){
+    res.send("Something exploded: ", e);
+  }
 });
 
 var server = app.listen(process.env.PORT || 3000, function () {

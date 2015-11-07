@@ -5,7 +5,9 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.13.3",
+    "jpeg-js": "^0.1.1",
     "multer": "^1.1.0",
+    "pngjs": "^2.1.0",
     "shortid": "^2.2.4"
   },
   "devDependencies": {},

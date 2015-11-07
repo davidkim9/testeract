@@ -13,9 +13,8 @@ app.get('/', function (req, res) {
     if (error !== null) {
       console.log('exec error: ' + error);
     }
-    res.send('Hello World!' + stdout);
+    res.send('Hello World!' + stdout + error + stderr);
   });
-  
 });
 
 var server = app.listen(process.env.PORT || 3000, function () {
